@@ -39,7 +39,7 @@ class Book extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['coverImageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
+            [['coverImageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'jpg'],
             [['releaseDate'], 'safe'],
             [['description'], 'string'],
             [['isbn'], 'integer'],
@@ -89,5 +89,10 @@ class Book extends ActiveRecord
         }
 
         return parent::beforeSave($insert);
+    }
+
+    function getCoverUrl(): string
+    {
+        return '/uploads/'.$this->id.'.jpg';
     }
 }
