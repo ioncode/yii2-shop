@@ -13,39 +13,43 @@ use yii\helpers\Url;
 $this->title = 'Book catalog';
 ?>
 <div class="site-index">
+  <div class="row jumbotron">
+    <div class="col-6">
+      <div class="text-center">
+        <h1 class="display-4">Top 10 authors in <?= $year ?></h1>
 
-  <div class="jumbotron text-center bg-transparent mt-5 mb-5">
-    <h1 class="display-4">Top 10 authors in <?= $year ?></h1>
-
-    <p class="lead">Here you can see <a href="/author">authors</a> with most <a href="/book">books</a> in catalog</p>
-  </div>
-
-  <div class="body-content">
-
-    <div class="row">
-        <?php ActiveForm::begin([
-            'method' => 'get',
-            'action' => Url::to(['site/index']),
-        ]) ?>
-      <div class="row">
-      <div class="col-4">
-          <?= DatePicker::widget([
-              'name'          => 'year',
-              'type'          => DatePicker::TYPE_INPUT,
-              'value'         => $year,
-              'pluginOptions' => [
-                  'autoclose'   => true,
-                  'format'      => 'yyyy',
-                  'minViewMode' => 2,
-                  'endDate' => date('Y').'y'
-              ]
-          ]) ?></div>
-      <div class="col-4">
-          <?php echo Html::submitButton('Change year', ['class' => 'btn btn-primary']); ?>
+        <p class="lead">Here you can see <a href="/author">authors</a> with most <a href="/book">books</a> in catalog
+        </p>
       </div>
-      </div>
-        <?php ActiveForm::end(); ?>
     </div>
+    <div class="col-6">
+      <div class="row">
+          <?php ActiveForm::begin([
+              'method' => 'get',
+              'action' => Url::to(['site/index']),
+          ]) ?>
+        <div class="row">
+          <div class="col-4">
+              <?= DatePicker::widget([
+                  'name'          => 'year',
+                  'type'          => DatePicker::TYPE_INPUT,
+                  'value'         => $year,
+                  'pluginOptions' => [
+                      'autoclose'   => true,
+                      'format'      => 'yyyy',
+                      'minViewMode' => 2,
+                      'endDate'     => date('Y') . 'y'
+                  ]
+              ]) ?></div>
+          <div class="col-4">
+              <?php echo Html::submitButton('Change year', ['class' => 'btn btn-primary']); ?>
+          </div>
+        </div>
+          <?php ActiveForm::end(); ?>
+      </div>
+    </div>
+  </div>
+  <div class="body-content">
     <div class="row">
         <?= $this->render('@app/views/author/index', [
             'dataProvider' => $topDataProvider,

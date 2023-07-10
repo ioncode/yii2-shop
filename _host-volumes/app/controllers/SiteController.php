@@ -65,6 +65,7 @@ class SiteController extends Controller
      */
     public function actionIndex(int $year = null): string
     {
+
         /* $bookAuthors = BookAuthor::find()
              ->select(['COUNT(*) as bookCount', 'author_id'])
              ->joinWith('book')
@@ -85,6 +86,7 @@ class SiteController extends Controller
 
 //        var_dump([$bookAuthors, $books]);
 //        die;
+        //todo add ability to see books count for selected year , see commented code below
         $currentYear = date('Y');
         if ($year) {
             if ($year > $currentYear) {
