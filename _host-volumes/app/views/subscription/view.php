@@ -4,14 +4,14 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
-/** @var app\models\Author $model */
+/** @var app\models\Subscription $model */
 
-$this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Authors', 'url' => ['index']];
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Subscriptions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="author-view">
+<div class="subscription-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -30,16 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'title',
-            'body:ntext',
+            'phone',
+            'author_id',
+            'guest_uuid',
         ],
     ]) ?>
-
-  <div class="row">
-    <div class="col-4">
-
-    </div>
-
-  </div>
 
 </div>
