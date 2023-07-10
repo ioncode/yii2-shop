@@ -43,7 +43,7 @@ class Book extends ActiveRecord
             [['coverImageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'jpg'],
             [['releaseDate'], 'safe'],
             [['description'], 'string'],
-            [['isbn'], 'integer'],
+            [['isbn'], 'integer', 'max' => 9999999999],
             [['title'], 'string', 'max' => 255],
         ];
     }

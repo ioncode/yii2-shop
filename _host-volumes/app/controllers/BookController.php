@@ -3,13 +3,15 @@
 namespace app\controllers;
 
 use app\models\Book;
+use Throwable;
 use Yii;
-use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\db\StaleObjectException;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use yii\web\Response;
 use yii\web\UploadedFile;
 
 /**
@@ -20,13 +22,13 @@ class BookController extends Controller
     /**
      * @inheritDoc
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return array_merge(
             parent::behaviors(),
             [
-                'verbs' => [
-                    'class' => VerbFilter::class,
+                'verbs'  => [
+                    'class'   => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -37,14 +39,14 @@ class BookController extends Controller
                     //'only' => ['create', 'update', 'delete'],
                     'rules' => [
                         [
-                            'allow' => true,
+                            'allow'   => true,
                             'actions' => ['index', 'view'],
-                            'roles' => ['?'],
+                            'roles'   => ['?'],
                         ],
                         [
-                            'allow' => true,
+                            'allow'   => true,
                             'actions' => ['index', 'view', 'create', 'update', 'delete'],
-                            'roles' => ['@'],
+                            'roles'   => ['@'],
                         ],
                     ],
                 ],
@@ -57,7 +59,7 @@ class BookController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Book::find(),
@@ -80,11 +82,12 @@ class BookController extends Controller
 
     /**
      * Displays a single Book model.
+     *
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView(int $id): string
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -94,24 +97,17 @@ class BookController extends Controller
     /**
      * Creates a new Book model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
+     *
+     * @return string|Response
      */
-    public function actionCreate()
+    public function actionCreate(): Response|string
     {
         $model = new Book();
 
         if ($this->request->isPost) {
-            $cover = UploadedFile::getInstance($model, 'coverImageFile');
             if ($model->load($this->request->post()) && $model->save()) {
-                if ($cover){
-                    $model->coverImageFile=$cover;
-                    $model->upload();
-                }
-                //todo move files to separate entity if you need multiple uploads per book, now files saved by book primary key without additional field
-//                echo '<pre>';
-//                var_dump([Yii::$app->request->post()['Book']['authors'], $cover, $_FILES, UploadedFile::getInstance($model, 'coverImageFile')]);die;
-
-                if (!empty($authors = Yii::$app->request->post()['Book']['authors'])){
+                $this->uploadCover($model);
+                if (!empty($authors = Yii::$app->request->post()['Book']['authors'])) {
                     $model->saveAuthors($authors);
                 }
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -125,18 +121,29 @@ class BookController extends Controller
         ]);
     }
 
+    private function uploadCover($model)
+    {
+        $cover = UploadedFile::getInstance($model, 'coverImageFile');
+        if ($cover) {
+            $model->coverImageFile = $cover;
+            $model->upload();
+        }
+    }
+
     /**
      * Updates an existing Book model.
      * If update is successful, the browser will be redirected to the 'view' page.
+     *
      * @param int $id ID
-     * @return string|\yii\web\Response
+     * @return string|Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id): Response|string
     {
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            $this->uploadCover($model);
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -148,11 +155,14 @@ class BookController extends Controller
     /**
      * Deletes an existing Book model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
+     *
      * @param int $id ID
-     * @return \yii\web\Response
+     * @return Response
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws Throwable
+     * @throws StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): Response
     {
         $this->findModel($id)->delete();
 
@@ -162,11 +172,12 @@ class BookController extends Controller
     /**
      * Finds the Book model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param int $id ID
      * @return Book the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): Book
     {
         if (($model = Book::findOne(['id' => $id])) !== null) {
             return $model;
