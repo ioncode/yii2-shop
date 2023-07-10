@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Author', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Author', ['author/create'], ['class' => 'btn btn-success']) ?>
     </p>
 
 
@@ -25,14 +25,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
+            'bookCount',
             'id',
             'title',
             'body:ntext',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Author $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
+                    return Url::toRoute(['author/'.$action, 'id' => $model->id]);
                 }
             ],
         ],

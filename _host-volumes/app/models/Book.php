@@ -43,7 +43,7 @@ class Book extends ActiveRecord
             [['coverImageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'jpg'],
             [['releaseDate'], 'safe'],
             [['description'], 'string'],
-            [['isbn'], 'integer', 'max' => 9999999999],
+            [['isbn'], 'integer', 'max' => 9999999999999],
             [['title'], 'string', 'max' => 255],
         ];
     }
@@ -85,7 +85,7 @@ class Book extends ActiveRecord
 
     public function beforeSave($insert): bool
     {
-        if ($insert and strlen($this->releaseDate) == 4) {
+        if (strlen($this->releaseDate) == 4) {
             $this->releaseDate = $this->releaseDate . '-01-01';
         }
 

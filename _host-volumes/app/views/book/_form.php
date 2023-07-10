@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Author;
+use kartik\date\DatePicker;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -17,11 +18,25 @@ $authors = ArrayHelper::map($authors, 'id', 'title');
 <div class="book-form">
 
     <?php $form = ActiveForm::begin(); ?>
+  <div class="row">
+    <div class="col-8">
+        <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-4">
+        <?= $form->field($model, 'releaseDate')->widget(DatePicker::class, [
+                'name'          => 'year',
+                'type'          => DatePicker::TYPE_INPUT,
+                'pluginOptions' => [
+                    'autoclose'   => true,
+                    'format'      => 'yyyy-mm-dd',
+                    'minViewMode' => 2,
+                    'endDate'     => date('Y') . 'y'
+                ]
+            ]
 
-    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'releaseDate')->textInput() ?>
-
+        ) ?>
+    </div>
+  </div>
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'isbn')->textInput() ?>
@@ -38,9 +53,9 @@ $authors = ArrayHelper::map($authors, 'id', 'title');
         ],
     ]) ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
+  <div class="form-group">
+      <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+  </div>
 
     <?php ActiveForm::end(); ?>
 
