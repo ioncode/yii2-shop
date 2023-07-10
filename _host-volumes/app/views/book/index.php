@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'description:ntext',
             'isbn',
             [
-                'class'      => ActionColumn::className(),
+                'class'      => ActionColumn::class,
                 'urlCreator' => function ($action, Book $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                 }

@@ -40,7 +40,7 @@ class AuthorController extends Controller
                         ],
                         [
                             'allow' => true,
-                            'actions' => ['create', 'update', 'delete'],
+                            'actions' => ['index', 'view', 'create', 'update', 'delete'],
                             'roles' => ['@'],
                         ],
                     ],

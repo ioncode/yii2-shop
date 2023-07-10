@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Book;
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -90,7 +91,11 @@ class BookController extends Controller
                 }
                 //todo move files to separate entity if you need multiple uploads per book, now files saved by book primary key without additional field
 //                echo '<pre>';
-//                var_dump([$cover, $_FILES, UploadedFile::getInstance($model, 'coverImageFile')->name]);die;
+//                var_dump([Yii::$app->request->post()['Book']['authors'], $cover, $_FILES, UploadedFile::getInstance($model, 'coverImageFile')]);die;
+
+                if (!empty($authors = Yii::$app->request->post()['Book']['authors'])){
+                    $model->saveAuthors($authors);
+                }
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {

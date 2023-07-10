@@ -10,11 +10,12 @@ use yii\web\UploadedFile;
 /**
  * This is the model class for table "book".
  *
- * @property int         $id
- * @property string|null $title
- * @property string|null $releaseDate
- * @property string|null $description
- * @property int|null    $isbn
+ * @property int               $id
+ * @property string|null       $title
+ * @property string|null       $releaseDate
+ * @property string|null       $description
+ * @property int|null          $isbn
+ * @property-read  ActiveQuery $authors
  */
 class Book extends ActiveRecord
 {
@@ -66,7 +67,7 @@ class Book extends ActiveRecord
     public function upload(): bool
     {
         if ($this->validate()) {
-            $this->coverImageFile->saveAs('uploads/' . $this->id. '.' . $this->coverImageFile->extension);
+            $this->coverImageFile->saveAs('uploads/' . $this->id . '.' . $this->coverImageFile->extension);
             return true;
         } else {
             return false;
@@ -93,6 +94,21 @@ class Book extends ActiveRecord
 
     function getCoverUrl(): string
     {
-        return '/uploads/'.$this->id.'.jpg';
+        return '/uploads/' . $this->id . '.jpg';
+    }
+
+    function saveAuthors(array $authors)
+    {
+        foreach ($authors as $author_id) {
+            $bookAuthor = new BookAuthor([
+                'book_id'   => $this->id,
+                'author_id' => $author_id
+            ]);
+            try {
+                $bookAuthor->save();
+            } catch (\Throwable $error) {
+                //todo add error handler
+            }
+        }
     }
 }
