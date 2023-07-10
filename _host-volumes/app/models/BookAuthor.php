@@ -2,19 +2,21 @@
 
 namespace app\models;
 
-use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "book_author".
  *
- * @property int $book_id
- * @property int $author_id
+ * @property int         $book_id
+ * @property int         $author_id
  * @property string|null $created_at
- *
- * @property Author $author
- * @property Book $book
+ * @property Author      $author
+ * @property Book        $book
  */
-class BookAuthor extends \yii\db\ActiveRecord
+class BookAuthor extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -45,8 +47,8 @@ class BookAuthor extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'book_id' => 'Book ID',
-            'author_id' => 'Author ID',
+            'book_id'    => 'Book ID',
+            'author_id'  => 'Author ID',
             'created_at' => 'Created At',
         ];
     }
@@ -54,7 +56,7 @@ class BookAuthor extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Author]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getAuthor()
     {
@@ -64,10 +66,22 @@ class BookAuthor extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Book]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getBook()
+    public function getBook(): ActiveQuery
     {
         return $this->hasOne(Book::class, ['id' => 'book_id']);
+    }
+
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class'              => TimestampBehavior::class,
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => null,
+                'value' => new Expression('NOW()'),
+            ]
+        ];
     }
 }
