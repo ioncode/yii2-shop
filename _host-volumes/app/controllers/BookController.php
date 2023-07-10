@@ -2,17 +2,18 @@
 
 namespace app\controllers;
 
-use app\models\Author;
+use app\models\Book;
+use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
- * AuthorController implements the CRUD actions for Author model.
+ * BookController implements the CRUD actions for Book model.
  */
-class AuthorController extends Controller
+class BookController extends Controller
 {
     /**
      * @inheritDoc
@@ -23,26 +24,9 @@ class AuthorController extends Controller
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class'   => VerbFilter::className(),
+                    'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
-                    ],
-                ],
-                'access' => [
-                    'class' => AccessControl::class,
-                    //same as allow guests to not restricted actions
-                    //'only' => ['create', 'update', 'delete'],
-                    'rules' => [
-                        [
-                            'allow' => true,
-                            'actions' => ['index', 'view'],
-                            'roles' => ['?'],
-                        ],
-                        [
-                            'allow' => true,
-                            'actions' => ['create', 'update', 'delete'],
-                            'roles' => ['@'],
-                        ],
                     ],
                 ],
             ]
@@ -50,15 +34,15 @@ class AuthorController extends Controller
     }
 
     /**
-     * Lists all Author models.
+     * Lists all Book models.
      *
      * @return string
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Author::find(),
-
+            'query' => Book::find(),
+            /*
             'pagination' => [
                 'pageSize' => 50
             ],
@@ -67,7 +51,7 @@ class AuthorController extends Controller
                     'id' => SORT_DESC,
                 ]
             ],
-
+            */
         ]);
 
         return $this->render('index', [
@@ -76,8 +60,7 @@ class AuthorController extends Controller
     }
 
     /**
-     * Displays a single Author model.
-     *
+     * Displays a single Book model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -90,17 +73,24 @@ class AuthorController extends Controller
     }
 
     /**
-     * Creates a new Author model.
+     * Creates a new Book model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     *
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Author();
+        $model = new Book();
 
         if ($this->request->isPost) {
+            $cover = UploadedFile::getInstance($model, 'coverImageFile');
             if ($model->load($this->request->post()) && $model->save()) {
+                if ($cover){
+                    $model->coverImageFile=$cover;
+                    $model->upload();
+                }
+                //todo move files to separate entity if you need multiple uploads per book, now files saved by book primary key without additional field
+//                echo '<pre>';
+//                var_dump([$cover, $_FILES, UploadedFile::getInstance($model, 'coverImageFile')->name]);die;
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -113,9 +103,8 @@ class AuthorController extends Controller
     }
 
     /**
-     * Updates an existing Author model.
+     * Updates an existing Book model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     *
      * @param int $id ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
@@ -134,9 +123,8 @@ class AuthorController extends Controller
     }
 
     /**
-     * Deletes an existing Author model.
+     * Deletes an existing Book model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     *
      * @param int $id ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
@@ -149,16 +137,15 @@ class AuthorController extends Controller
     }
 
     /**
-     * Finds the Author model based on its primary key value.
+     * Finds the Book model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     *
      * @param int $id ID
-     * @return Author the loaded model
+     * @return Book the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Author::findOne(['id' => $id])) !== null) {
+        if (($model = Book::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

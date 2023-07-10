@@ -8,8 +8,8 @@
 This is the repo of the official [Yii 2.0 Framework](http://www.yiiframework.com/) image on [DockerHub](https://hub.docker.com/r/yiisoftware/yii2-php/) for PHP.
 
 ## About
-Book catalog
 http://localhost:8202/author/index - authors CRUD
+http://localhost:8202/book - books
 ### Available versions for `yiisoftware/yii2-php`
 
 The following images are built on a *weekly* basis for **arm64** and **amd64**. For regular commits on **master** we only build images for **amd64** suffixed with `-latest`/`-latest-min`.
