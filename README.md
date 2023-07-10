@@ -9,7 +9,7 @@ This is the repo of the official [Yii 2.0 Framework](http://www.yiiframework.com
 
 ## About
 Book catalog
-
+http://localhost:8202/author/index - authors CRUD
 ### Available versions for `yiisoftware/yii2-php`
 
 The following images are built on a *weekly* basis for **arm64** and **amd64**. For regular commits on **master** we only build images for **amd64** suffixed with `-latest`/`-latest-min`.
