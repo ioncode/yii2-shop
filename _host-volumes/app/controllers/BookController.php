@@ -144,6 +144,9 @@ class BookController extends Controller
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             $this->uploadCover($model);
+            if (!empty($authors = Yii::$app->request->post()['Book']['authors'])) {
+                $model->saveAuthors($authors);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

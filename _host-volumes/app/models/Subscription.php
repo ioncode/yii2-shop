@@ -61,4 +61,19 @@ class Subscription extends ActiveRecord
     {
         return $this->hasOne(Author::class, ['id' => 'author_id']);
     }
+
+    public function createNotification(Book $book)
+    {
+        try {
+            $notification = new Notification([
+                'subscription_id' => $this->id,
+                'text'            => 'Added book «' . $book->title . '»! Find it at http://localhost:8202/book/view?id=' . $book->id
+            ]);
+            $notification->save();
+        } catch (\Throwable $exception){
+            //todo add logger
+        }
+
+
+    }
 }

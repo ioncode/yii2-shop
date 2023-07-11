@@ -80,8 +80,20 @@ class BookAuthor extends ActiveRecord
                 'class'              => TimestampBehavior::class,
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => null,
-                'value' => new Expression('NOW()'),
+                'value'              => new Expression('NOW()'),
             ]
         ];
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        if ($insert) {
+            $subscriptions = Subscription::find()->where(['=', 'author_id', $this->author_id])->all();
+            foreach ($subscriptions as $subscription) {
+                $subscription->createNotification($this->book);
+            }
+        }
+        //todo add processing on change author_id for existing record
+        parent::afterSave($insert, $changedAttributes);
     }
 }

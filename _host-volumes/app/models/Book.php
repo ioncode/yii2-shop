@@ -99,6 +99,7 @@ class Book extends ActiveRecord
 
     function saveAuthors(array $authors)
     {
+        //todo discuss real needing authors deletion, on mistake delete whole book record & create new
         foreach ($authors as $author_id) {
             $bookAuthor = new BookAuthor([
                 'book_id'   => $this->id,
