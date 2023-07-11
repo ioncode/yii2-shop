@@ -17,7 +17,7 @@ class m230710_132349_create_subscription_table extends Migration
     {
         $this->createTable('{{%subscription}}', [
             'id' => $this->primaryKey(),
-            'phone' => $this->integer(13)->notNull(),
+            'phone' => $this->bigInteger(15)->notNull(),
             'author_id' => $this->integer()->notNull(),
             'guest_uuid' => $this->string(36),
         ]);

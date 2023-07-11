@@ -17,7 +17,7 @@ class m230710_105612_create_book_table extends Migration
             'title' => $this->string(),
             'releaseDate' => $this->date(),
             'description' => $this->text(),
-            'isbn' => $this->integer(13),
+            'isbn' => $this->bigInteger(13),
         ]);
     }
 
