@@ -10,10 +10,11 @@ This is the repo of the official [Yii 2.0 Framework](http://www.yiiframework.com
 - http://localhost:8202/ - top 10 authors in selected year (current by default)
 - http://localhost:8202/author/index - authors CRUD
 - http://localhost:8202/book - books
+- http://localhost:8202/subscription/index - subscription management 
 
 only logged in users can manage content, all can view 
 ### Plans on future 
 
-- add ability to subscribe on authors releases
+- improve subscriptions
 - show last release of author 
 - add count of released books in selected year (now overall)
