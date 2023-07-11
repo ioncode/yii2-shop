@@ -21,7 +21,7 @@ class m230711_001509_create_notification_table extends Migration
             'create_time' => $this->timestamp()->notNull()->defaultExpression('NOW()'),
             'update_time' => $this->timestamp()->defaultExpression('NOW()')->append('ON UPDATE CURRENT_TIMESTAMP'),
             'text' => $this->string(),
-            'status' => $this->integer(),
+            'status' => $this->integer()->notNull()->defaultValue(1),
             'result' => $this->text(),
         ]);
 
